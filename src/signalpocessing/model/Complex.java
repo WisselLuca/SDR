@@ -2,64 +2,73 @@ package signalpocessing.model;
 
 public class Complex {
 
-	private double parteReale;
-	private double parteImmaginaria;
+	private double reale;
+	private double immaginaria;
 
 
-	public Complex(double parteReale, double parteImmaginaria) {
-		super();
-		this.parteReale = parteReale;
-		this.parteImmaginaria = parteImmaginaria;
+	public Complex(double reale, double immaginaria) {
+		this.reale = reale;
+		this.immaginaria = immaginaria;
 	}
 
 
-	public double getParteReale() {
-		return parteReale;
+	public double getReale() {
+		return reale;
 	}
 
 
-	public void setParteReale(double parteReale) {
-		this.parteReale = parteReale;
+	public void setreale(double reale) {
+		this.reale = reale;
 	}
 
 
-	public double getParteImmaginaria() {
-		return parteImmaginaria;
+	public double getImmaginaria() {
+		return immaginaria;
 	}
 
 
-	public void setParteImmaginaria(double parteImmaginaria) {
-		this.parteImmaginaria = parteImmaginaria;
+	public void setimmaginaria(double immaginaria) {
+		this.immaginaria = immaginaria;
 	}
 
 
 
 	//Metodi per complessi
 	public void complessoCogniugato(){
-		this.parteImmaginaria= - this.parteImmaginaria;
+		this.immaginaria= - this.immaginaria;
 	}
 
-	public static Complex sum(Complex c1, Complex c2){
-		double parteReale = c1.getParteReale()+ c2.getParteReale();]
-		double parteImmaginaria = c1.getParteImmaginaria() +c2.getParteImmaginaria();
-		return new Complex(parteReale,parteImmaginaria);
+	//Somma tra due numeri complessi
+	public Complex somma(Complex b){
+		Complex result = new Complex((this.reale+b.getReale()),
+				(this.immaginaria+b.getImmaginaria()));
+		return result;
 	}
 
-	public static Complex prodotto(Complex c1, Complex c2){
-		double parteReale = (c1.getParteReale()* c2.getParteReale())- (c1.getParteImmaginaria() *c2.getParteImmaginaria());
-		double parteImmaginaria= (c1.getParteReale()* c2.getParteImmaginaria()) + (c1.getParteImmaginaria() *c2.getParteReale());
-		return new Complex(parteReale,parteImmaginaria);
+	//Differenza tra 2 numeri complessi
+	public Complex differenza(Complex b){
+		Complex result = new Complex((this.reale -  b.getReale()),
+				(this.immaginaria - b.getImmaginaria()));
+		return result;
+	}
+
+
+	//Prodotto tra 2 numeri complessi
+	public Complex prodotto(Complex b){
+		double reale = this.reale * b.getReale() - this.getImmaginaria() * b.getImmaginaria();
+		double immag = this.reale * b.getImmaginaria() + b.getReale() * this.immaginaria;
+		return new Complex(reale, immag);
 	}
 
 	public double phase(){
-		return Math.atan2(this.parteImmaginaria, this.parteReale);
+		return Math.atan2(this.immaginaria, this.reale);
 	}
 
 
 	@Override
 	public String toString() {
-		return "Complex [parteReale=" + parteReale + ", parteImmaginaria="
-				+ parteImmaginaria + "]";
+		return "Complex [reale=" + reale + ", immaginaria="
+				+ immaginaria + "]";
 	}
 
 	//Copia e incolla la convoluzione
@@ -69,8 +78,6 @@ public class Complex {
 		Complex c1= new Complex(1,2);
 		Complex c2= new Complex(1,2);
 		Complex c3= new Complex(0,0);
-
-		System.out.println(c3.prodotto(c1, c2));
 
 	}
 }
