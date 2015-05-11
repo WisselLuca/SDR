@@ -89,7 +89,7 @@ public class SignalProcessor {
 		return new Signal(sequenzaEspansa);
 	}
 
-	public Signal lowPassFilter(double f1) {
+/*	public Signal lowPassFilter(double f1) {
 		band = 1 / F1;
 		numCampioni = (2 * (5 / band) + 1);
 		array[] values = array[numCampioni];
@@ -102,5 +102,5 @@ public class SignalProcessor {
 		}
 		Signal lpf = Signal(values);
 		return lpf;
-	}
+	}*/
 }
