@@ -2,10 +2,7 @@ package signalprocessing.library;
 
 import signalpocessing.model.Complex;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,9 +11,14 @@ import java.util.List;
  */
 public class FileBuffer {
     public static List<Complex> readComplexFromFile(String path){
+        File fileFromPath = new File(path);
         BufferedReader in;
         List<String> rows = new LinkedList<>();
         List<Complex> outputComplex = new LinkedList<>();
+        if (fileFromPath.isDirectory())
+            return readComplexFromDirectory(fileFromPath);
+        if (fileFromPath.getName().charAt(0) == '.')
+            return outputComplex;
         try {
             in = new BufferedReader(new FileReader(path));
             String currentLine = "";
@@ -37,6 +39,14 @@ public class FileBuffer {
         return outputComplex;
     }
 
+    private static List<Complex> readComplexFromDirectory(File directory){
+        List<Complex> output = new LinkedList<>();
+        for (File fileInDir : directory.listFiles()){
+            output.addAll(readComplexFromFile(fileInDir.getPath()));
+        }
+        return output;
+    }
+
     private static List<Complex> parseComplexFromList(List<String> list){
         List<Complex> output = new LinkedList<>();
         for (String row : list){
@@ -52,7 +62,7 @@ public class FileBuffer {
 
     public static void main (String[] args){
         List<Complex> lista;
-        lista =readComplexFromFile("C:\\Users\\Luca\\Desktop\\output_1.dat");
+        lista =readComplexFromFile("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_1");
         System.out.print(lista.size());
     }
 }
