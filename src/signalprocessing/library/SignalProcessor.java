@@ -41,6 +41,15 @@ public class SignalProcessor {
 		return result;
 	}
 
+	public static Signal convoluzione(Signal segnaleIn, Signal rispImpulsivaFiltro){
+
+		Complex[] values = convoluzione(segnaleIn.getValues(), rispImpulsivaFiltro.getValues());
+		Signal signal = new Signal(values);
+
+		return signal;
+	}
+
+
 	public static double sinc(double n, double band){
 		double res = 0;
 		if(n==0)
@@ -53,12 +62,13 @@ public class SignalProcessor {
 		return res;
 	}
 
-	private static Signal lowPassFilter(double band, double f1) {
 
+	private static Signal lowPassFilter(double band, double f1) {
 		double fs = 2*band;
 		double tc = 1/fs;
 		int numCampioni;
 		int lunghezza = (int)(tc*10);
+
 		if(lunghezza%2 == 0)
 			numCampioni = lunghezza - 1;
 		else numCampioni = lunghezza;
@@ -69,7 +79,6 @@ public class SignalProcessor {
 			double realval = f1*2* band * sinc(n, 2 * band);
 			values[n + simmetria] = new Complex(realval, 0);
 		}
-
 		Signal lpf = new Signal(values);
 
 		return lpf;
@@ -89,18 +98,73 @@ public class SignalProcessor {
 		return new Signal(sequenzaEspansa);
 	}
 
-/*	public Signal lowPassFilter(double f1) {
-		band = 1 / F1;
-		numCampioni = (2 * (5 / band) + 1);
-		array[] values = array[numCampioni];
-		center = n / 2;
-		values[center] = Complex(1, 0);
-		for (i = 1; i <= n / 2; i++) {
-			value = Complex(sinc(band, i), 0);
-			values[center + i] = value;
-			values[center - i] = value;
+
+	public static Signal interpolazione(Signal signalIn, int F1){
+
+		double band = 1/(2.0*F1);
+		Signal lpf = lowPassFilter(band, F1);
+		Signal interpolato = convoluzione(signalIn, lpf);
+		Complex[] val = new Complex[signalIn.getLength()];
+		int n = (lpf.getLength() - 1)/2;
+		int j = 0;
+
+		for (int i = n; i < interpolato.getLength() - n; i++){
+			val[j] = interpolato.getValues()[i];
+			j++;
 		}
-		Signal lpf = Signal(values);
-		return lpf;
-	}*/
+
+		return new Signal(val);
+
+	}
+
+	public static Signal decimazione(Signal in, int F2) {
+		Complex[] vectorIn = in.getValues();
+		Complex[] vectorDecimato = new Complex[vectorIn.length/F2];
+
+		int j = 0;
+		for (int i = 0; i < vectorIn.length; i++) {
+			if(i % F2 ==0 && j <vectorDecimato.length) {
+				vectorDecimato[j] = vectorIn[i];
+				j++;
+			}
+		}
+		return new Signal(vectorDecimato);
+	}
+
+
+	public Noise[] generaNoise(int pfa, double snr, int length){
+		Noise[]generati = new Noise[1/pfa];
+		for (int i=0; i==(1/pfa); i++){
+			generati[i]= new Noise(snr, length);
+		}
+		return generati;
+	}
+
+
+	public double calcoloEnergia(Noise noise){
+		double energia=0;
+		double[]parteImmaginaria= noise.getParteImmaginaria();
+		double[]parteReale=noise.getParteReale();
+		Complex tmp;
+		for(int i=0; i<noise.getLength(); i++){
+			tmp= new Complex(parteReale[i],parteImmaginaria[i]);
+			energia+= Math.pow(tmp.abs(), 2);
+		}
+	return energia/noise.getLength();
+	}
+
+
+	public double[] vettoreEnergia(int pfa, double snr, int length){
+
+		Noise[] generati= generaNoise(pfa, snr, length);
+		double[]energia = new double[generati.length];
+		for(int i=0; i==generati.length; i++) {
+			energia[i] = calcoloEnergia(generati[i]);
+		}
+		return energia;
+	}
+
+
+
 }
+

@@ -64,6 +64,16 @@ public class Complex {
 		return new Complex(reale, immag);
 	}
 
+	public Complex pow(double n) {
+		double reale = Math.pow(this.abs(), n) * Math.cos(n*this.phase());
+		double immaginaria = Math.pow(this.abs(), n) * Math.sin	(n*this.phase());
+		return new Complex(reale,immaginaria);
+	}
+
+	public double abs() {
+		return Math.hypot(this.reale, this.immaginaria);
+	}
+
 	public double phase(){
 		return Math.atan2(this.immaginaria, this.reale);
 	}
