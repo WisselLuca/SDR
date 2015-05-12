@@ -87,12 +87,12 @@ public class Complex {
 
 	//Copia e incolla la convoluzione
 
-	public static void main (String []args){
-
-		Complex c1= new Complex(1,2);
-		Complex c2= new Complex(1,2);
-		Complex c3= new Complex(0,0);
-		List<Complex> list = FileBuffer.readComplexFromFile("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_1/output_1.dat");
-		System.out.println(list.size());
-	}
+//	public static void main (String []args){
+//
+//		Complex c1= new Complex(1,2);
+//		Complex c2= new Complex(1,2);
+//		Complex c3= new Complex(0,0);
+//		List<Complex> list = FileBuffer.readComplexFromFile("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_1/output_1.dat");
+//		System.out.println(list.size());
+//	}
 }

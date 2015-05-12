@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Andrea on 11/05/15.
+ * Created by  on 11/05/15.
  */
 public class FileBuffer {
     public static List<Complex> readComplexFromFile(String path){
@@ -48,5 +48,11 @@ public class FileBuffer {
             }
         }
         return output;
+    }
+
+    public static void main (String[] args){
+        List<Complex> lista;
+        lista =readComplexFromFile("C:\\Users\\Luca\\Desktop\\output_1.dat");
+        System.out.print(lista.size());
     }
 }
