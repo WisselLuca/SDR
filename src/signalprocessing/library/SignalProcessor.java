@@ -164,6 +164,22 @@ public class SignalProcessor {
 		return energia;
 	}
 
+	public double media(double[] energia) {
+		int somma=0;
+		for(int i=0; i<energia.length; i++)
+			somma += energia[i];
+		return (double)somma/energia.length;
+	}
+
+	public double varianza(double[] energia)
+	{
+		double m = media(energia);
+		double sommaScartiQuad = 0;
+		for(int i=0; i<energia.length; i++)
+			sommaScartiQuad += (energia[i]-m)*(energia[i]-m);
+		return sommaScartiQuad/energia.length;
+	}
+
 
 
 }
