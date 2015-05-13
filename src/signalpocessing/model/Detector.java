@@ -26,7 +26,7 @@ public class Detector {
 
     public double calcoloPotenzaRumore(Signal segnaleDaInput){
         double potenzaRumore=0;
-        potenzaRumore= 1-calcoloEnergiaSegnale(segnaleDaInput);
+        potenzaRumore= calcoloEnergiaSegnale(segnaleDaInput)-1;
         return potenzaRumore;
     }
 
@@ -74,7 +74,7 @@ public class Detector {
             tmp= new Complex(complex.getReale(),complex.getImmaginaria());
             energia+= Math.pow(tmp.abs(), 2);
         }
-        return energia;
+        return energia/segnaleDaInput.getLength();
     }
 
 

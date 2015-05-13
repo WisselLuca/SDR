@@ -78,7 +78,7 @@ public class FileBuffer {
 
     public static void main (String[] args){
         List<?> lista;
-        lista =readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_1");
+        lista =readComplexFromPath("C:/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_1");
         System.out.println(lista.size());
         List<Complex> temp = (List<Complex>)lista.get(0);
         Signal s = new Signal(temp);
@@ -89,6 +89,8 @@ public class FileBuffer {
 //        for (double d : energyVector){
 //            System.out.println(d);
 //        }
-        System.out.println(detector.calculateSoglia(s));
+        System.out.println(detector.calcoloEnergiaSegnale(s));
+        System.out.println(detector.calcoloPotenzaRumore(s));
+        System.out.println(detector.calcolaSNR(s));
     }
 }
