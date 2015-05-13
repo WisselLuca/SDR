@@ -34,7 +34,8 @@ public class Detector {
 
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
     public Noise[] generaNoise( Signal segnaleDaInput){
-        int numberOfNoises = (int)(1.0/this.pfa);
+       // int numberOfNoises = (int)(1.0/this.pfa);
+        int numberOfNoises = 100;
         Noise[] generati = new Noise[numberOfNoises];
         for (int i=0; i<numberOfNoises; i++){
             generati[i]= new Noise(calcolaSNR(segnaleDaInput), segnaleDaInput.getLength());

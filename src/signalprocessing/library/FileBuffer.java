@@ -2,9 +2,11 @@ package signalprocessing.library;
 
 import signalpocessing.model.Complex;
 import signalpocessing.model.Detector;
+import signalpocessing.model.Noise;
 import signalpocessing.model.Signal;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,11 +78,11 @@ public class FileBuffer {
         return output;
     }
 
-    public static void main (String[] args){
+    public static void main (String[] args) {
         List<?> lista;
-        lista =readComplexFromPath("C:/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_1");
+        lista = readComplexFromPath("C:/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_1");
         System.out.println(lista.size());
-        List<Complex> temp = (List<Complex>)lista.get(0);
+        List<Complex> temp = (List<Complex>) lista.get(0);
         Signal s = new Signal(temp);
         System.out.println(s.getValues().length);
         Detector detector = new Detector();
@@ -89,8 +91,15 @@ public class FileBuffer {
 //        for (double d : energyVector){
 //            System.out.println(d);
 //        }
+        Noise n = new Noise(detector.calcolaSNR(s),s.getLength());
         System.out.println(detector.calcoloEnergiaSegnale(s));
         System.out.println(detector.calcoloPotenzaRumore(s));
         System.out.println(detector.calcolaSNR(s));
+/*        Noise[] prova = detector.generaNoise(s);
+        for (int i = 0; i < 100; i++) {
+            System.out.println(prova[i].toString());
+        }*/
+
+        System.out.println(detector.calculateSoglia(s));
+        }
     }
-}

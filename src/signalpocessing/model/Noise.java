@@ -1,5 +1,6 @@
 package signalpocessing.model;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -77,6 +78,11 @@ public class Noise {
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "Noise{" +
+                "parteImmaginaria=" + Arrays.toString(parteImmaginaria) +
+                ", parteReale=" + Arrays.toString(parteReale) +
+                '}';
+    }
 }

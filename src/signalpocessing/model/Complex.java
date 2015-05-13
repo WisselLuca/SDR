@@ -85,6 +85,8 @@ public class Complex {
 				+ immaginaria + "]";
 	}
 
+
+
 	//Copia e incolla la convoluzione
 
 //	public static void main (String []args){
