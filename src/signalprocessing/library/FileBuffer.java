@@ -1,6 +1,7 @@
 package signalprocessing.library;
 
 import signalpocessing.model.Complex;
+import signalpocessing.model.Signal;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -10,39 +11,53 @@ import java.util.List;
  * Created by  on 11/05/15.
  */
 public class FileBuffer {
-    public static List<Complex> readComplexFromFile(String path){
+
+    public static List<List<?>> readComplexFromPath(String path){
+        List<List<?>> output = new LinkedList<>();
         File fileFromPath = new File(path);
+        if (fileFromPath.isDirectory()){
+            for (File current : fileFromPath.listFiles()){
+                List<?> temp;
+                if (current.isDirectory()) {
+                    temp = readComplexFromPath(current.getPath());
+                }
+                else {
+                    temp = readComplexFromFile(current);
+                }
+                if (temp.size() != 0)
+                    output.add(temp);
+            }
+        }
+        else {
+            List<Complex> temp = readComplexFromFile(fileFromPath);
+            if(temp.size() != 0)
+                output.add(temp);
+        }
+        return output;
+    }
+
+    private static List<Complex> readComplexFromFile(File file){
+        List<Complex> output = new LinkedList<>();
+        if (file.getName().charAt(0) == '.')
+            return output;
         BufferedReader in;
         List<String> rows = new LinkedList<>();
-        List<Complex> outputComplex = new LinkedList<>();
-        if (fileFromPath.isDirectory())
-            return readComplexFromDirectory(fileFromPath);
-        if (fileFromPath.getName().charAt(0) == '.')
-            return outputComplex;
-        try {
-            in = new BufferedReader(new FileReader(path));
+        try{
+            in = new BufferedReader(new FileReader(file.getPath()));
             String currentLine = "";
             while (currentLine != null){
                 currentLine = in.readLine();
                 rows.add(currentLine);
             }
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-        } catch (IOException c) {
-            System.out.println(c);
+        }catch (FileNotFoundException f){
+            System.out.println("Il file non e' stato trovato");
+        }
+        catch (IOException io){
+            System.out.println("Si e' verificato un errore nella lettura del file");
         }
         finally {
-            if(!rows.isEmpty()){
-                outputComplex = parseComplexFromList(rows);
-            }
-        }
-        return outputComplex;
-    }
-
-    private static List<Complex> readComplexFromDirectory(File directory){
-        List<Complex> output = new LinkedList<>();
-        for (File fileInDir : directory.listFiles()){
-            output.addAll(readComplexFromFile(fileInDir.getPath()));
+            if (!rows.isEmpty())
+                output = parseComplexFromList(rows);
         }
         return output;
     }
@@ -61,8 +76,11 @@ public class FileBuffer {
     }
 
     public static void main (String[] args){
-        List<Complex> lista;
-        lista =readComplexFromFile("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_1");
-        System.out.print(lista.size());
+        List<?> lista;
+        lista =readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_1");
+        System.out.println(lista.size());
+        List<Complex> temp = (List<Complex>)lista.get(0);
+        Signal s = new Signal(temp);
+        System.out.println(s.getValues().length);
     }
 }

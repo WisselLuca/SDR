@@ -1,5 +1,7 @@
 package signalpocessing.model;
 
+import java.util.List;
+
 public class Signal {
 
 	
@@ -9,10 +11,15 @@ public class Signal {
 	public Signal(Complex[] values) {
 		super();
 		this.values = values;
-		this.length= length;
+		this.length= values.length;
 		
 	}
-
+	public Signal(List<Complex> values){
+		Complex[] temp= new Complex[values.size()];
+		temp = values.toArray(temp);
+		this.values = temp;
+		this.length = values.size();
+	}
 	public Complex[] getValues() {
 		return values;
 	}
