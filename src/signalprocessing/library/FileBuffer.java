@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by  on 11/05/15.
+ * Created by Andrea on 11/05/15.
  */
 public class FileBuffer {
 

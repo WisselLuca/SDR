@@ -6,6 +6,8 @@
 
 	public class SignalProcessor {
 
+		private Detector detector;
+
 
 		public static double[] convoluzione(double[] v1, double[] v2){
 			int n = v1.length+v2.length;
