@@ -1,6 +1,7 @@
 package signalprocessing.library;
 
 import signalpocessing.model.Complex;
+import signalpocessing.model.Detector;
 import signalpocessing.model.Signal;
 
 import java.io.*;
@@ -82,5 +83,12 @@ public class FileBuffer {
         List<Complex> temp = (List<Complex>)lista.get(0);
         Signal s = new Signal(temp);
         System.out.println(s.getValues().length);
+        Detector detector = new Detector();
+        double[] energyVector = detector.getEnergyVector(s);
+//        System.out.println("Vettore di energia");
+//        for (double d : energyVector){
+//            System.out.println(d);
+//        }
+        System.out.println(detector.calculateSoglia(s));
     }
 }

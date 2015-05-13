@@ -169,10 +169,10 @@
 		}*/
 
 		public double avrage(double[] energia) {
-			int somma=0;
+			double somma=0.0;
 			for(int i=0; i<energia.length; i++)
 				somma += energia[i];
-			return (double)somma/energia.length;
+			return somma/energia.length;
 		}
 
 		public double varianza(double[] energia){

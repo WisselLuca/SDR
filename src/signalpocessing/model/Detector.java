@@ -1,8 +1,10 @@
 package signalpocessing.model;
 
+import signalprocessing.library.ErroreInverso;
 import signalprocessing.library.FileBuffer;
 import signalprocessing.library.SignalProcessor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static signalprocessing.library.ErroreInverso.InvErf;
@@ -11,8 +13,8 @@ import static signalprocessing.library.ErroreInverso.InvErf;
  * Created by Luca on 12/05/2015.
  */
 public class Detector {
-    private SignalProcessor processore;
-    private int pfa;
+    private SignalProcessor processore = new SignalProcessor();
+    private double pfa = 0.001;
 
 
     //Calcolo snr
@@ -32,8 +34,9 @@ public class Detector {
 
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
     public Noise[] generaNoise( Signal segnaleDaInput){
-        Noise[]generati = new Noise[1/this.pfa];
-        for (int i=0; i==(1/this.pfa); i++){
+        int numberOfNoises = (int)(1.0-this.pfa);
+        Noise[] generati = new Noise[numberOfNoises];
+        for (int i=0; i<numberOfNoises; i++){
             generati[i]= new Noise(calcolaSNR(segnaleDaInput), segnaleDaInput.getLength());
         }
         return generati;
@@ -57,7 +60,7 @@ public class Detector {
 
         Noise[] generati= generaNoise(segnaleDaInput);
         double[]energia = new double[generati.length];
-        for(int i=0; i==generati.length; i++) {
+        for(int i=0; i<generati.length; i++) {
             energia[i] = calcoloEnergiaRumore(generati[i]);
         }
         return energia;
@@ -76,38 +79,39 @@ public class Detector {
 
 
 //calcolo della soglia
-    public double calculateSoglia(Signal segnaleDaInput) throws Exception {
-        double result;
+    public double calculateSoglia(Signal segnaleDaInput){
+        double result = -1.1;
         double med= processore.avrage(vettoreEnergiaRumore(segnaleDaInput));
         double varia = processore.varianza(vettoreEnergiaRumore(segnaleDaInput));
+        try {
+            double error= ErroreInverso.InvErf(1 - (2 * pfa));
+            result = med + (Math.sqrt(varia * 2) * error);
 
-        double error= InvErf(1-(2*pfa));
-        result = med + (Math.sqrt(varia * 2) * error);
+        }catch (Exception e){
+            System.out.println();
+        }
         return result;
     }
 
 
     //Confrontare il vettoreEnergiaRumore con la soglia..
 
-  /*  public double[] vettoreEnergiaH1(Signal segnaleDaInput){
-     *//*   Hipotesi1 tmp = new Hipotesi1();*//*
-        double[] energy = new double[1000];
-        int i;
-        for(Complex complex: segnaleDaInput) {
-            Signal tmp2 = new Signal(segnaleDaInput[], 1000);
-            for (i = 0; i == tmp2.getLength(); i++) {
-                energy[i] = calcoloEnergiaSegnale(tmp2);
-            }
-        }
-      *//* Hipotesi1 tmp = new Hipotesi1();
-        int i =0;
-        for(Signal segnale: segnaliDaInput){
-
-            energy[i]= tmp.calcoloEnergiaSegnale(segnale);
-            i++;
-       *//*
-        return energy;
-   */ }
+  public double[] getEnergyVector(Signal signal) {
+      double[] output = new double[signal.getLength() / 1000];
+      List<Complex> signalValues = new LinkedList<>();
+      for (Complex complex : signal.getValues())
+          signalValues.add(complex);
+      int count = 0;
+      for (int i = 0; i < signal.getLength(); i += 1000) {
+          List<Complex> temp;
+          temp = signalValues.subList(i, i + 999);
+          Signal tempSignal = new Signal(temp);
+          output[count] = this.calcoloEnergiaSegnale(tempSignal);
+          count++;
+      }
+      return output;
+  }
+}
 
 /* RIVEDERE QUESTO CODICE!!!!!!!!!!!!!!
             dovrebbe essere il confronto tra la soglia e il vettore di energie di rumore calcolato prima
