@@ -91,6 +91,7 @@ public class FileBuffer {
 //        for (double d : energyVector){
 //            System.out.println(d);
 //        }
+
         Noise n = new Noise(detector.calcolaSNR(s),s.getLength());
        /* System.out.println(detector.calcoloEnergiaSegnale(s));
         System.out.println(detector.calcoloPotenzaRumore(s));
