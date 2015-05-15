@@ -21,6 +21,7 @@ public class Detector {
 
     public double calcolaSNR(Signal segnaleDaInput){
         double snr= 1/ calcoloPotenzaRumore(segnaleDaInput);
+        snr= Math.log10(snr)*10;
             return snr;
     }
 
