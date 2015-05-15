@@ -80,9 +80,9 @@ public class FileBuffer {
 
     public static void main (String[] args) {
         List<?> lista;
-        lista = readComplexFromPath("C:/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_1");
+        lista = readComplexFromPath("C:/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_2");
         System.out.println(lista.size());
-        List<Complex> temp = (List<Complex>) lista.get(0);
+        List<Complex> temp = (List<Complex>) lista.get(2);
         Signal s = new Signal(temp);
         System.out.println(s.getValues().length);
         Detector detector = new Detector();
@@ -92,14 +92,15 @@ public class FileBuffer {
 //            System.out.println(d);
 //        }
         Noise n = new Noise(detector.calcolaSNR(s),s.getLength());
-        System.out.println(detector.calcoloEnergiaSegnale(s));
+       /* System.out.println(detector.calcoloEnergiaSegnale(s));
         System.out.println(detector.calcoloPotenzaRumore(s));
         System.out.println(detector.calcolaSNR(s));
-/*        Noise[] prova = detector.generaNoise(s);
+*//*        Noise[] prova = detector.generaNoise(s);
         for (int i = 0; i < 100; i++) {
             System.out.println(prova[i].toString());
-        }*/
+        }*//*
 
-        System.out.println(detector.calculateSoglia(s));
+        System.out.println(detector.calculateSoglia(s));*/
+        System.out.print(detector.detectionPercentage(s));
         }
     }

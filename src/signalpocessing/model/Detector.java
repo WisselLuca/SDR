@@ -33,14 +33,17 @@ public class Detector {
 
 
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
-    public Noise[] generaNoise( Signal segnaleDaInput){
+    public double[] vettoreEnergiaRumore( Signal segnaleDaInput){
        // int numberOfNoises = (int)(1.0/this.pfa);
-        int numberOfNoises = 100;
-        Noise[] generati = new Noise[numberOfNoises];
+        int numberOfNoises = 10;
+        Noise generato;
+        double snr = calcolaSNR(segnaleDaInput);
+        double[]energyNoiseVector= new double[numberOfNoises];
         for (int i=0; i<numberOfNoises; i++){
-            generati[i]= new Noise(calcolaSNR(segnaleDaInput), segnaleDaInput.getLength());
+            generato = new Noise(snr, segnaleDaInput.getLength());
+            energyNoiseVector[i]=calcoloEnergiaRumore(generato);
         }
-        return generati;
+        return energyNoiseVector;
     }
 
 //calcolo dell'energia di un segnale di rumore
@@ -57,7 +60,7 @@ public class Detector {
     }
 
 //Calcolo dell'energia di ogni campione di rumore e lo mette in un array
-    public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
+   /* public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
 
         Noise[] generati= generaNoise(segnaleDaInput);
         double[]energia = new double[generati.length];
@@ -65,7 +68,7 @@ public class Detector {
             energia[i] = calcoloEnergiaRumore(generati[i]);
         }
         return energia;
-    }
+    }*/
 
 //CAlcolo dell'energia di un segnale
     public double calcoloEnergiaSegnale(Signal segnaleDaInput){
@@ -112,6 +115,23 @@ public class Detector {
       }
       return output;
   }
+
+
+
+    public double detectionPercentage(Signal segnaleDaInput){
+        double[]energyVetctor = getEnergyVector(segnaleDaInput);
+        double soglia = calculateSoglia(segnaleDaInput);
+        int i;
+        int count=0;
+        double result=0;
+        for(i=0; i<energyVetctor.length; i++){
+            if(energyVetctor[i]>soglia) {
+                count++;
+            }
+        }
+        result= (count/i)*100;
+        return result;
+    }
 }
 
 /* RIVEDERE QUESTO CODICE!!!!!!!!!!!!!!
@@ -127,5 +147,6 @@ public class Detector {
         }
         return count;
     }*/
+
 
 
