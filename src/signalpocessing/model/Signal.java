@@ -8,6 +8,10 @@ public class Signal {
 	private Complex[] values;
 	private int length;
 
+	public Signal(){
+
+	}
+
 	public Signal(Complex[] values) {
 		super();
 		this.values = values;
@@ -28,6 +32,13 @@ public class Signal {
 
 	public void setValues(Complex[] values) {
 		this.values = values;
+	}
+
+	public void setValues(List<Complex> values){
+		Complex[] temp = new Complex[values.size()];
+		temp = values.toArray(temp);
+		this.values = temp;
+		this.length = temp.length;
 	}
 
 	public int getLength() {

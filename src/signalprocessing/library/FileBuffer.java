@@ -80,9 +80,9 @@ public class FileBuffer {
 
     public static void main (String[] args) {
         List<?> lista;
-        lista = readComplexFromPath("C:/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_1");
+        lista = readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_2");
         System.out.println(lista.size());
-        List<Complex> temp = (List<Complex>) lista.get(3);
+        List<Complex> temp = (List<Complex>) lista.get(2);
         Signal s = new Signal(temp);
         System.out.println(s.getValues().length);
         Detector detector = new Detector();

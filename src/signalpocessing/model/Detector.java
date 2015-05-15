@@ -34,14 +34,15 @@ public class Detector {
 
 
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
+ //Optimized
     public double[] vettoreEnergiaRumore( Signal segnaleDaInput){
        // int numberOfNoises = (int)(1.0/this.pfa);
-        int numberOfNoises = 10;
-        Noise generato;
+        int numberOfNoises = 100;
+        Noise generato = new Noise();
         double snr = calcolaSNR(segnaleDaInput);
         double[]energyNoiseVector= new double[numberOfNoises];
         for (int i=0; i<numberOfNoises; i++){
-            generato = new Noise(snr, segnaleDaInput.getLength());
+            generato.calculateAttributes(snr, segnaleDaInput.getLength());
             energyNoiseVector[i]=calcoloEnergiaRumore(generato);
         }
         return energyNoiseVector;
@@ -52,9 +53,11 @@ public class Detector {
         double energia=0;
         double[]parteImmaginaria= noise.getParteImmaginaria();
         double[]parteReale=noise.getParteReale();
-        Complex tmp;
+        Complex tmp = new Complex(-1,-1);
         for(int i=0; i<noise.getLength(); i++){
-            tmp= new Complex(parteReale[i],parteImmaginaria[i]);
+            //tmp= new Complex(parteReale[i],parteImmaginaria[i]);
+            tmp.setreale(parteReale[i]);
+            tmp.setimmaginaria(parteImmaginaria[i]);
             energia+= Math.pow(tmp.abs(), 2);
         }
         return energia/noise.getLength();
@@ -72,11 +75,13 @@ public class Detector {
     }*/
 
 //CAlcolo dell'energia di un segnale
+    //Optimized
     public double calcoloEnergiaSegnale(Signal segnaleDaInput){
         double energia = 0;
-        Complex tmp;
+        Complex tmp = new Complex(-1,-1);
         for (Complex complex : segnaleDaInput.getValues()) {
-            tmp= new Complex(complex.getReale(),complex.getImmaginaria());
+            tmp.setreale(complex.getReale());
+            tmp.setimmaginaria(complex.getImmaginaria());
             energia+= Math.pow(tmp.abs(), 2);
         }
         return energia/segnaleDaInput.getLength();
@@ -84,10 +89,12 @@ public class Detector {
 
 
 //calcolo della soglia
+    //Optimized
     public double calculateSoglia(Signal segnaleDaInput){
         double result = -1.1;
-        double med= processore.avrage(vettoreEnergiaRumore(segnaleDaInput));
-        double varia = processore.varianza(vettoreEnergiaRumore(segnaleDaInput));
+        double[] energyNoiseVector = vettoreEnergiaRumore(segnaleDaInput);
+        double med= processore.avrage(energyNoiseVector);
+        double varia = processore.varianza(energyNoiseVector);
         try {
             double error= ErroreInverso.InvErf(1 - (2 * pfa));
             result = med + (Math.sqrt(varia * 2) * error);
@@ -100,17 +107,18 @@ public class Detector {
 
 
     //Confrontare il vettoreEnergiaRumore con la soglia..
-
+//Optimized
   public double[] getEnergyVector(Signal signal) {
       double[] output = new double[signal.getLength() / 1000];
       List<Complex> signalValues = new LinkedList<>();
       for (Complex complex : signal.getValues())
           signalValues.add(complex);
       int count = 0;
+      Signal tempSignal = new Signal();
       for (int i = 0; i < signal.getLength(); i += 1000) {
           List<Complex> temp;
           temp = signalValues.subList(i, i + 999);
-          Signal tempSignal = new Signal(temp);
+          tempSignal.setValues(temp);
           output[count] = this.calcoloEnergiaSegnale(tempSignal);
           count++;
       }
