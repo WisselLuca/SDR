@@ -2,6 +2,8 @@
 
 	import signalpocessing.model.*;
 
+	import java.util.Arrays;
+
 	import static signalprocessing.library.ErroreInverso.InvErf;
 
 	public class SignalProcessor {
@@ -9,48 +11,55 @@
 		private Detector detector;
 
 
-		public static double[] convoluzione(double[] v1, double[] v2){
-			int n = v1.length+v2.length;
-			double[] result = new double[n];
-			int upperBound=0;
-			int lowerBound=0;
+//		public static double[] convoluzione(double[] v1, double[] v2){
+//			int n = v1.length+v2.length;
+//			double[] result = new double[n];
+//			int upperBound=0;
+//			int lowerBound=0;
+//
+//			for(int k=0; k<n;k++){
+//				upperBound=Math.min(k,v2.length-1);
+//				lowerBound=Math.max(0,k-v1.length+1);
+//				for(int j= lowerBound; j<lowerBound; j++){
+//					result[k] += (v1[k-j]*v2[j]);
+//				}
+//			}
+//
+//			return result;
+//
+//		}
 
-			for(int k=0; k<n;k++){
-				upperBound=Math.min(k,v2.length-1);
-				lowerBound=Math.max(0,k-v1.length+1);
-				for(int j= lowerBound; j<lowerBound; j++){
-					result[k] += (v1[k-j]*v2[j]);
-				}
-			}
 
-			return result;
-
-		}
-
-
-		public static Complex[] convoluzione(Complex[] v1, Complex[] v2){
-			int n = v1.length+v2.length;
-			Complex[] result = new Complex[n];
-			int upperBound=0;
-			int lowerBound=0;
-
-			for(int k=0; k<n;k++){
-				upperBound=Math.min(k,v2.length-1);
-				lowerBound=Math.max(0,k-v1.length+1);
-				for(int j= lowerBound; j<lowerBound; j++){
-					result[k] = result[k].somma(v1[k - j].prodotto(v2[j]));
-				}
-			}
-
-			return result;
-		}
+//		public static Complex[] convoluzione(Complex[] v1, Complex[] v2){
+//			int n = v1.length+v2.length;
+//			Complex[] result = new Complex[n];
+//			int upperBound=0;
+//			int lowerBound=0;
+//
+//			for(int k=0; k<n;k++){
+//				upperBound=Math.min(k,v2.length-1);
+//				lowerBound=Math.max(0,k-v1.length+1);
+//				for(int j= lowerBound; j<lowerBound; j++){
+//					result[k] = result[k].somma(v1[k - j].prodotto(v2[j]));
+//				}
+//			}
+//
+//			return result;
+//		}
 
 		public static Signal convoluzione(Signal segnaleIn, Signal rispImpulsivaFiltro){
-
-			Complex[] values = convoluzione(segnaleIn.getValues(), rispImpulsivaFiltro.getValues());
-			Signal signal = new Signal(values);
-
-			return signal;
+			int n = segnaleIn.size() + rispImpulsivaFiltro.size();
+			Signal result  = new Signal();
+			int upperBound = 0;
+			int lowerBound = 0;
+			for (int k = 0; k < n; k++) {
+				upperBound = Math.min(k,rispImpulsivaFiltro.size()-1);
+				lowerBound = Math.max(0,k - segnaleIn.size()+1);
+				for (int j = lowerBound;j<=upperBound; j++){
+					result.add(k,result.get(k).somma(segnaleIn.get(k-j).prodotto(rispImpulsivaFiltro.get(j))));
+				}
+			}
+			return result;
 		}
 
 
@@ -76,30 +85,29 @@
 			if(lunghezza%2 == 0)
 				numCampioni = lunghezza - 1;
 			else numCampioni = lunghezza;
-			Complex[] values = new Complex[numCampioni];
+			Signal lpf = new Signal();
 			int simmetria = (numCampioni) / 2;
 
 			for(int n = - simmetria; n <= simmetria; n++){
 				double realval = f1*2* band * sinc(n, 2 * band);
-				values[n + simmetria] = new Complex(realval, 0);
+				lpf.add(n + simmetria, new Complex(realval, 0));
 			}
-			Signal lpf = new Signal(values);
+
 
 			return lpf;
 		}
 
 		public Signal espansione(Signal segnaleIngresso,int f1) {
-			Complex[] sequenzaIN = segnaleIngresso.getValues();
-			Complex[] sequenzaEspansa = new Complex[sequenzaIN.length * f1];
+			Signal sequenzaEspansa = new Signal();
 			int j = 0;
-			for (int i = 0; i < sequenzaEspansa.length; i++) {
+			for (int i = 0; i < segnaleIngresso.size() * f1; i++) {
 				if (i % f1 == 0) {
-					sequenzaEspansa[i] = sequenzaIN[j];
+					sequenzaEspansa.add(i,segnaleIngresso.get(j));
 					j++;
 				} else
-					sequenzaEspansa[i] = new Complex(0,0);
+					sequenzaEspansa.add(i, new Complex(0,0));
 			}
-			return new Signal(sequenzaEspansa);
+			return sequenzaEspansa;
 		}
 
 
@@ -108,31 +116,30 @@
 			double band = 1/(2.0*F1);
 			Signal lpf = lowPassFilter(band, F1);
 			Signal interpolato = convoluzione(signalIn, lpf);
-			Complex[] val = new Complex[signalIn.getLength()];
-			int n = (lpf.getLength() - 1)/2;
+			Signal val = new Signal();
+			int n = (lpf.size() - 1)/2;
 			int j = 0;
 
-			for (int i = n; i < interpolato.getLength() - n; i++){
-				val[j] = interpolato.getValues()[i];
+			for (int i = n; i < interpolato.size() - n; i++){
+				val.add(j,interpolato.get(i));
 				j++;
 			}
 
-			return new Signal(val);
+			return val;
 
 		}
 
 		public static Signal decimazione(Signal in, int F2) {
-			Complex[] vectorIn = in.getValues();
-			Complex[] vectorDecimato = new Complex[vectorIn.length/F2];
+			Signal vectorDecimato = new Signal();
 
 			int j = 0;
-			for (int i = 0; i < vectorIn.length; i++) {
-				if(i % F2 ==0 && j <vectorDecimato.length) {
-					vectorDecimato[j] = vectorIn[i];
+			for (int i = 0; i < in.size(); i++) {
+				if(i % F2 ==0 && j <in.size()/F2) {
+					vectorDecimato.add(j,in.get(i));
 					j++;
 				}
 			}
-			return new Signal(vectorDecimato);
+			return vectorDecimato;
 		}
 
 

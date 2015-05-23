@@ -1,53 +1,70 @@
 package signalpocessing.model;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Signal {
+public class Signal extends LinkedList<Complex> {
 
 	
-	private Complex[] values;
-	private int length;
+//	private Complex[] values;
+//	private int length;
 
 	public Signal(){
 
 	}
 
-	public Signal(Complex[] values) {
-		super();
-		this.values = values;
-		this.length=values.length;
+	public Signal(Collection<Complex> complexes){
+		this();
+		this.addAll(complexes);
 	}
 
-	public Signal(List<Complex> values){
-		Complex[] temp= new Complex[values.size()];
-		temp = values.toArray(temp);
-		this.values = temp;
-		this.length = values.size();
+	@Override
+	public Complex[] toArray() {
+		return (Complex[])super.toArray();
 	}
 
-
-	public Complex[] getValues() {
-		return values;
+	@Override
+	public Signal subList(int fromIndex, int toIndex) {
+		return new Signal(super.subList(fromIndex, toIndex));
 	}
 
-	public void setValues(Complex[] values) {
-		this.values = values;
-	}
+	//	public Signal(Complex[] values) {
+//		super();
+//		this.values = values;
+//		this.length=values.length;
+//	}
 
-	public void setValues(List<Complex> values){
-		Complex[] temp = new Complex[values.size()];
-		temp = values.toArray(temp);
-		this.values = temp;
-		this.length = temp.length;
-	}
+//	public Signal(List<Complex> values){
+//		Complex[] temp= new Complex[values.size()];
+//		temp = values.toArray(temp);
+//		this.values = temp;
+//		this.length = values.size();
+//	}
 
-	public int getLength() {
-		return length;
-	}
 
-	public void setLength(int length) {
-		this.length = length;
-	}
-	
+//	public Complex[] getValues() {
+//		return values;
+//	}
+//
+//	public void setValues(Complex[] values) {
+//		this.values = values;
+//	}
+//
+//	public void setValues(List<Complex> values){
+//		Complex[] temp = new Complex[values.size()];
+//		temp = values.toArray(temp);
+//		this.values = temp;
+//		this.length = temp.length;
+//	}
+//
+//	public int getLength() {
+//		return length;
+//	}
+//
+//	public void setLength(int length) {
+//		this.length = length;
+//	}
+//
 	
 }
