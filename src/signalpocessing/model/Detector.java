@@ -16,6 +16,7 @@ import static signalprocessing.library.ErroreInverso.InvErf;
  */
 public class Detector {
     private SignalProcessor processore = new SignalProcessor();
+
     private double pfa = 0.001;
 
 
@@ -40,7 +41,8 @@ public class Detector {
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
  //Optimized
     public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
-        int numberOfNoises = (int)(1.0/this.pfa);
+        //int numberOfNoises = (int)(1.0/this.pfa);
+        int numberOfNoises = 100;
         Noise generato = new Noise();
         double snr = calcolaSNR(segnaleDaInput);
         double[]energyNoiseVector= new double[numberOfNoises];
@@ -101,7 +103,7 @@ public class Detector {
     }
 
 
-    //Confrontare il vettoreEnergiaRumore con la soglia
+  //preso il segnale in ingresso ogni 1000(mille) campioni, calcola l'energia della parte di segnale e mette il risultato in un vettore
   public double[] getEnergyVector(Signal signal) {
       double[] output = new double[signal.size() / 1000];
       int count = 0;
@@ -132,19 +134,7 @@ public class Detector {
     }
 }
 
-/* RIVEDERE QUESTO CODICE!!!!!!!!!!!!!!
-            dovrebbe essere il confronto tra la soglia e il vettore di energie di rumore calcolato prima
 
-    public int detectionFreeSpace(double[]energia, int pfa, List<Signal> segnali) throws Exception {
-        double soglia = calculateSoglia(energia,pfa);
-        double[] energy = vettoreEnergiaH1(segnali);
-        int count=0;
-        for (int i=0; i==energy.length; i++){
-            if (energy[i]>soglia)
-                count++;
-        }
-        return count;
-    }*/
 
 
 
