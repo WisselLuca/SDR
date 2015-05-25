@@ -6,6 +6,7 @@ import signalpocessing.model.Noise;
 import signalpocessing.model.Signal;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
@@ -82,9 +83,9 @@ public class FileBuffer {
     public static void main (String[] args) {
         long timeStart = System.currentTimeMillis();
         List<?> lista;
-        lista = readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_2");
+        lista = readComplexFromPath("/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_1");
         System.out.println(lista.size());
-        List<Complex> temp = (List<Complex>) lista.get(2);
+        List<Complex> temp = (List<Complex>) lista.get(3);
         Signal s = new Signal(temp);
         System.out.println(s.size());
         Detector detector = new Detector();
@@ -103,9 +104,11 @@ public class FileBuffer {
     //        System.out.println(prova[i].toString());
     //    }*//*
 
-        System.out.println(detector.calcolaSNR(s));
-        System.out.println(detector.calculateSoglia(s));
-        System.out.println(detector.detectionPercentage(s));
+        System.out.println("SNR: " +detector.calcolaSNR(s));
+       /* System.out.println(detector.calculateSoglia(s));*/
+        DecimalFormat df = new DecimalFormat("###,###");
+       /* System.out.println("detection percentage: "+ detector.detectionPercentage(s) + "%");*/
+        System.out.println("detection percentage: " + df.format(detector.detectionPercentage(s))+" %");
         long timerEnd = System.currentTimeMillis();
         System.out.println("Executed in: "+ ((timerEnd-timeStart)/1000)+ " secondi");
         }

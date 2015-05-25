@@ -5,6 +5,7 @@ import signalprocessing.library.FileBuffer;
 import signalprocessing.library.SignalProcessor;
 
 import java.awt.event.ComponentEvent;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,13 +20,15 @@ public class Detector {
 
 
     //Calcolo snr
-
+    //Potenza SegnaleUtile / Potenza Rumore
     public double calcolaSNR(Signal segnaleDaInput){
         double snr= 1/ calcoloPotenzaRumore(segnaleDaInput);
         snr= Math.log10(snr)*10;
             return snr;
     }
 
+    //Passando da input il Segnale, sapendo che la potenza del segnale è stata calcolata con il meteodo dell'energia,
+    //dalla Potenza del Rumore=1, ottengo per differenza la potenza del rumore
     public double calcoloPotenzaRumore(Signal segnaleDaInput){
         double potenzaRumore=0;
         potenzaRumore= calcoloEnergiaSegnale(segnaleDaInput)-1;
@@ -37,8 +40,7 @@ public class Detector {
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
  //Optimized
     public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
-       // int numberOfNoises = (int)(1.0/this.pfa);
-        int numberOfNoises = 100;
+        int numberOfNoises = (int)(1.0/this.pfa);
         Noise generato = new Noise();
         double snr = calcolaSNR(segnaleDaInput);
         double[]energyNoiseVector= new double[numberOfNoises];
@@ -49,7 +51,7 @@ public class Detector {
         return energyNoiseVector;
     }
 
-//calcolo dell'energia di un segnale di rumore
+//calcolo dell'energia di un segnale di rumore con la formula delle slide
     public double calcoloEnergiaRumore(Noise noise){
         double energia=0;
         double[]parteImmaginaria= noise.getParteImmaginaria();
@@ -103,6 +105,7 @@ public class Detector {
         }catch (Exception e){
             System.out.println(e.toString());
         }
+        System.out.println("soglia: "+ result);
         return result;
     }
 
@@ -127,14 +130,14 @@ public class Detector {
         double[]energyVetctor = getEnergyVector(segnaleDaInput);
         double soglia = calculateSoglia(segnaleDaInput);
         int i;
-        double count=0;
+        int count=0;
         double result=0;
         for(i=0; i<energyVetctor.length; i++){
             if(energyVetctor[i]>soglia) {
                 count++;
             }
         }
-        result= (count/i)*100;
+        result= ((double)count/(double)i)*100;
         return result;
     }
 }
