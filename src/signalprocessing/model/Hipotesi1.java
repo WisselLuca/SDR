@@ -1,6 +1,4 @@
-package signalpocessing.model;
-
-import signalprocessing.library.FileBuffer;
+package signalprocessing.model;
 
 /**
  * Created by Luca on 12/05/2015.

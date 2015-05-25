@@ -1,6 +1,6 @@
 package signalprocessing.library;
 
-import signalpocessing.model.*;
+import signalprocessing.model.*;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -87,7 +87,7 @@ public class FileBuffer {
     public static void main (String[] args) {
         long timeStart = System.currentTimeMillis();
         List<?> lista;
-        lista = readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_3");
+        lista = readComplexFromPath("/Users/Luca/Downloads/Sequenze_SDR_2015/Sequenza_3");
         System.out.println(lista.size());
         List<Complex> temp = (List<Complex>) lista.get(2);
         Signal s = new Signal(temp);

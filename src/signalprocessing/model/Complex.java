@@ -1,8 +1,4 @@
-package signalpocessing.model;
-
-import signalprocessing.library.FileBuffer;
-
-import java.util.List;
+package signalprocessing.model;
 
 public class Complex {
 

@@ -1,15 +1,7 @@
-package signalpocessing.model;
+package signalprocessing.model;
 
 import signalprocessing.library.ErroreInverso;
-import signalprocessing.library.FileBuffer;
 import signalprocessing.library.SignalProcessor;
-
-import java.awt.event.ComponentEvent;
-import java.text.DecimalFormat;
-import java.util.LinkedList;
-import java.util.List;
-
-import static signalprocessing.library.ErroreInverso.InvErf;
 
 /**
  * Created by Luca on 12/05/2015.
@@ -17,7 +9,7 @@ import static signalprocessing.library.ErroreInverso.InvErf;
 public class Detector {
     private SignalProcessor processore = new SignalProcessor();
 
-    private double pfa = 0.001;
+    private double pfa = 0.01;
 
 
     //Calcolo snr

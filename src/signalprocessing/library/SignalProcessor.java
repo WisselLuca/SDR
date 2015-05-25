@@ -1,10 +1,7 @@
 	package signalprocessing.library;
 
-	import signalpocessing.model.*;
+	import signalprocessing.model.*;
 
-	import java.util.Arrays;
-
-	import static signalprocessing.library.ErroreInverso.InvErf;
 
 	public class SignalProcessor {
 

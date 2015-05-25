@@ -1,4 +1,4 @@
-package signalpocessing.model;
+package signalprocessing.model;
 
 import java.util.Collection;
 import java.util.LinkedList;
