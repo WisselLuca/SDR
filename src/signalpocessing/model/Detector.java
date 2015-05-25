@@ -66,19 +66,10 @@ public class Detector {
         return energia/noise.getLength();
     }
 
-//Calcolo dell'energia di ogni campione di rumore e lo mette in un array
-   /* public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
 
-        Noise[] generati= generaNoise(segnaleDaInput);
-        double[]energia = new double[generati.length];
-        for(int i=0; i<generati.length; i++) {
-            energia[i] = calcoloEnergiaRumore(generati[i]);
-        }
-        return energia;
-    }*/
 
-//CAlcolo dell'energia di un segnale
-    //Optimized
+//Calcolo dell'energia di un segnale
+    //Usando la formula vista nelle slide
     public double calcoloEnergiaSegnale(Signal segnaleDaInput){
         double energia = 0;
         Complex tmp = new Complex(-1,-1);
@@ -92,7 +83,7 @@ public class Detector {
 
 
 //calcolo della soglia
-    //Optimized
+    //CAlcolo della media, calcolo della varianza, calcolo dell'errrore inverso e utilizzando la formula delle slide calcolo la soglia
     public double calculateSoglia(Signal segnaleDaInput){
         double result = -1.1;
         double[] energyNoiseVector = vettoreEnergiaRumore(segnaleDaInput);
@@ -110,8 +101,7 @@ public class Detector {
     }
 
 
-    //Confrontare il vettoreEnergiaRumore con la soglia..
-//Optimized
+    //Confrontare il vettoreEnergiaRumore con la soglia
   public double[] getEnergyVector(Signal signal) {
       double[] output = new double[signal.size() / 1000];
       int count = 0;
@@ -125,7 +115,7 @@ public class Detector {
   }
 
 
-
+//Confronta il vettore di energia del segnale in ingresso e lo confronta con la soglia, se maggiore aumenta il count e restituisce la percentuale di successo
     public double detectionPercentage(Signal segnaleDaInput){
         double[]energyVetctor = getEnergyVector(segnaleDaInput);
         double soglia = calculateSoglia(segnaleDaInput);

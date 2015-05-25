@@ -23,7 +23,7 @@ public class Noise {
     public Noise(double snr, int length) {
         this.calculateAttributes(snr, length);
     }
-
+//Ottimizzazione del codice per renderlo più veloce
     public void calculateAttributes(double snr, int length){
         Random campione = new Random();
         double snr_linearizzato = Math.pow(10, (snr/10));
