@@ -94,8 +94,8 @@ public class FileBuffer {
         System.out.println(s.size());
         Detector detector = new Detector();
         Noise n = new Noise(detector.calcolaSNR(s),s.size());
-        System.out.println(detector.calcolaSNR(s));
-        System.out.println(Hipotesi1.detectionPercentage(s));
+        System.out.println("SNR: "+detector.calcolaSNR(s));
+        System.out.println("Detection percentage: "+Hipotesi1.detectionPercentage(s));
         long timerEnd = System.currentTimeMillis();
         System.out.println("Executed in: "+ ((timerEnd-timeStart)/1000)+ " secondi");
         }
