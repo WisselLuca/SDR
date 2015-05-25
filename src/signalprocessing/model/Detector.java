@@ -9,7 +9,7 @@ import signalprocessing.library.SignalProcessor;
 public class Detector {
     private SignalProcessor processore = new SignalProcessor();
 
-    private double pfa = 0.01;
+    private double pfa = 0.001;
 
 
     //Calcolo snr
