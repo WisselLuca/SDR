@@ -22,38 +22,23 @@ public class Noise {
 
     public Noise(double snr, int length) {
         this.calculateAttributes(snr, length);
-//        Random campione;
-//        double snr_linearizzato = Math.pow(10, (snr/10));
-//        this.pot_rumore = (1/snr_linearizzato);
-//        this.length = length;
-//        this.parteReale = new double[length];
-//        for (int i = 0; i < this.length; i++) {
-//            campione = new Random();
-//            parteReale[i] = campione.nextGaussian() *
-//                    Math.sqrt(pot_rumore/2);
-//        }
-//        this.parteImmaginaria = new double[length];
-//        for (int i = 0; i < this.length; i++) {
-//            campione = new Random();
-//            parteImmaginaria[i] = campione.nextGaussian() *
-//                    Math.sqrt(pot_rumore/2);
-//        }
     }
 
     public void calculateAttributes(double snr, int length){
-        Random campione;
+        Random campione = new Random();
         double snr_linearizzato = Math.pow(10, (snr/10));
         this.pot_rumore = (1/snr_linearizzato);
         this.length = length;
         this.parteReale = new double[length];
         for (int i = 0; i < this.length; i++) {
-            campione = new Random();
+            //campione = new Random();
             parteReale[i] = campione.nextGaussian() *
                     Math.sqrt(pot_rumore/2);
         }
+        campione = new Random();
         this.parteImmaginaria = new double[length];
         for (int i = 0; i < this.length; i++) {
-            campione = new Random();
+            //campione = new Random();
             parteImmaginaria[i] = campione.nextGaussian() *
                     Math.sqrt(pot_rumore/2);
         }

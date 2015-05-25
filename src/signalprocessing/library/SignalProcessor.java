@@ -10,43 +10,6 @@
 
 		private Detector detector;
 
-
-//		public static double[] convoluzione(double[] v1, double[] v2){
-//			int n = v1.length+v2.length;
-//			double[] result = new double[n];
-//			int upperBound=0;
-//			int lowerBound=0;
-//
-//			for(int k=0; k<n;k++){
-//				upperBound=Math.min(k,v2.length-1);
-//				lowerBound=Math.max(0,k-v1.length+1);
-//				for(int j= lowerBound; j<lowerBound; j++){
-//					result[k] += (v1[k-j]*v2[j]);
-//				}
-//			}
-//
-//			return result;
-//
-//		}
-
-
-//		public static Complex[] convoluzione(Complex[] v1, Complex[] v2){
-//			int n = v1.length+v2.length;
-//			Complex[] result = new Complex[n];
-//			int upperBound=0;
-//			int lowerBound=0;
-//
-//			for(int k=0; k<n;k++){
-//				upperBound=Math.min(k,v2.length-1);
-//				lowerBound=Math.max(0,k-v1.length+1);
-//				for(int j= lowerBound; j<lowerBound; j++){
-//					result[k] = result[k].somma(v1[k - j].prodotto(v2[j]));
-//				}
-//			}
-//
-//			return result;
-//		}
-
 		public static Signal convoluzione(Signal segnaleIn, Signal rispImpulsivaFiltro){
 			int n = segnaleIn.size() + rispImpulsivaFiltro.size();
 			Signal result  = new Signal();
@@ -143,38 +106,6 @@
 		}
 
 
-		/*public Noise[] generaNoise(int pfa, double snr, int length){
-			Noise[]generati = new Noise[1/pfa];
-			for (int i=0; i==(1/pfa); i++){
-				generati[i]= new Noise(snr, length);
-			}
-			return generati;
-		}
-
-
-		public double calcoloEnergia(Noise noise){
-			double energia=0;
-			double[]parteImmaginaria= noise.getParteImmaginaria();
-			double[]parteReale=noise.getParteReale();
-			Complex tmp;
-			for(int i=0; i<noise.getLength(); i++){
-				tmp= new Complex(parteReale[i],parteImmaginaria[i]);
-				energia+= Math.pow(tmp.abs(), 2);
-			}
-		return energia/noise.getLength();
-		}*/
-
-
-/*		public double[] vettoreEnergia(int pfa, double snr, int length){
-
-			Noise[] generati= generaNoise(pfa, snr, length);
-			double[]energia = new double[generati.length];
-			for(int i=0; i==generati.length; i++) {
-				energia[i] = calcoloEnergia(generati[i]);
-			}
-			return energia;
-		}*/
-
 		public double avrage(double[] energia) {
 			double somma=0.0;
 			for(int i=0; i<energia.length; i++)
@@ -189,16 +120,6 @@
 				sommaScartiQuad += (energia[i]-m)*(energia[i]-m);
 			return sommaScartiQuad/energia.length;
 		}
-
-/*		public double calculateSoglia(double[]energia,int pfa) throws Exception {
-			double result= 0;
-			double med= avrage(energia);
-			double varia = varianza(energia);
-
-			double errore= InvErf(1-(2*pfa));
-			result = med+(Math.sqrt(varia * 2) * errore);
-			return result;
-		}*/
 
 
 	}
