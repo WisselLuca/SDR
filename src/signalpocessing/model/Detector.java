@@ -28,11 +28,11 @@ public class Detector {
             return snr;
     }
 
-    //Passando da input il Segnale, sapendo che la potenza del segnale è stata calcolata con il meteodo dell'energia,
+    //Passando da input il Segnale, sapendo che la potenza del segnale ï¿½ stata calcolata con il meteodo dell'energia,
     //dalla Potenza del Rumore=1, ottengo per differenza la potenza del rumore
     public double calcoloPotenzaRumore(Signal segnaleDaInput){
         double potenzaRumore=0;
-        potenzaRumore= calcoloEnergiaSegnale(segnaleDaInput)-1;
+        potenzaRumore= Hipotesi1.calcoloEnergiaSegnale(segnaleDaInput)-1;
         return potenzaRumore;
     }
 
@@ -41,8 +41,7 @@ public class Detector {
 //Genero 1/0,001= 1000 Rumori con SNR calcolato prima e di lunghezza pari alla lunghezza del segnale del campione, nel nostro caso 1 milione
  //Optimized
     public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
-        //int numberOfNoises = (int)(1.0/this.pfa);
-        int numberOfNoises = 100;
+        int numberOfNoises = (int)(1.0/this.pfa);
         Noise generato = new Noise();
         double snr = calcolaSNR(segnaleDaInput);
         double[]energyNoiseVector= new double[numberOfNoises];
@@ -60,27 +59,11 @@ public class Detector {
         double[]parteReale=noise.getParteReale();
         Complex tmp = new Complex(-1,-1);
         for(int i=0; i<noise.getLength(); i++){
-            //tmp= new Complex(parteReale[i],parteImmaginaria[i]);
             tmp.setreale(parteReale[i]);
             tmp.setimmaginaria(parteImmaginaria[i]);
             energia+= Math.pow(tmp.abs(), 2);
         }
         return energia/noise.getLength();
-    }
-
-
-
-//Calcolo dell'energia di un segnale
-    //Usando la formula vista nelle slide
-    public double calcoloEnergiaSegnale(Signal segnaleDaInput){
-        double energia = 0;
-        Complex tmp = new Complex(-1,-1);
-        for (Complex complex : segnaleDaInput) {
-            tmp.setreale(complex.getReale());
-            tmp.setimmaginaria(complex.getImmaginaria());
-            energia+= Math.pow(tmp.abs(), 2);
-        }
-        return energia/segnaleDaInput.size();
     }
 
 
@@ -102,36 +85,6 @@ public class Detector {
         return result;
     }
 
-
-  //preso il segnale in ingresso ogni 1000(mille) campioni, calcola l'energia della parte di segnale e mette il risultato in un vettore
-  public double[] getEnergyVector(Signal signal) {
-      double[] output = new double[signal.size() / 1000];
-      int count = 0;
-      Signal tempSignal;
-      for (int i = 0; i < signal.size(); i += 1000) {
-          tempSignal = signal.subList(i, i + 999);
-          output[count] = this.calcoloEnergiaSegnale(tempSignal);
-          count++;
-      }
-      return output;
-  }
-
-
-//Confronta il vettore di energia del segnale in ingresso e lo confronta con la soglia, se maggiore aumenta il count e restituisce la percentuale di successo
-    public double detectionPercentage(Signal segnaleDaInput){
-        double[]energyVetctor = getEnergyVector(segnaleDaInput);
-        double soglia = calculateSoglia(segnaleDaInput);
-        int i;
-        int count=0;
-        double result=0;
-        for(i=0; i<energyVetctor.length; i++){
-            if(energyVetctor[i]>soglia) {
-                count++;
-            }
-        }
-        result= ((double)count/(double)i)*100;
-        return result;
-    }
 }
 
 
