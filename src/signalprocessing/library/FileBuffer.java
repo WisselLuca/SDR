@@ -14,6 +14,12 @@ import java.util.List;
  */
 public class FileBuffer {
 
+
+    //Metodo principale per il parsing di Segnali da un file, può prendere come input sia cartelle che file singoli, il
+    //risultato sarà una lista che rispecchia la gerarchia delle cartelle es: Root/cartella1/output1,output2,output3 ->
+    //->List-List-Signal
+    //          |-Signal
+    //          |-Signal
     public static List<List<?>> readComplexFromPath(String path){
         List<List<?>> output = new LinkedList<>();
         File fileFromPath = new File(path);
@@ -38,6 +44,7 @@ public class FileBuffer {
         return output;
     }
 
+    // metodo di utility per il parsing di un file (caso base), ignora i file di sistema derivati dal Filesystem
     private static List<Complex> readComplexFromFile(File file){
         List<Complex> output = new LinkedList<>();
         if (file.getName().charAt(0) == '.')
@@ -64,6 +71,7 @@ public class FileBuffer {
         return output;
     }
 
+    //metodo di utility per convertire le righe del file in List<Complex>
     private static List<Complex> parseComplexFromList(List<String> list){
         List<Complex> output = new LinkedList<>();
         for (String row : list){
@@ -77,6 +85,8 @@ public class FileBuffer {
         return output;
     }
 
+
+    //Metodo main per il test dei metodi, contiene un timer per visualizzare il tempo impiegato
     public static void main (String[] args) {
         long timeStart = System.currentTimeMillis();
         List<?> lista;
