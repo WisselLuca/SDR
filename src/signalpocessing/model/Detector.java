@@ -64,17 +64,6 @@ public class Detector {
         return energia/noise.getLength();
     }
 
-//Calcolo dell'energia di ogni campione di rumore e lo mette in un array
-   /* public double[] vettoreEnergiaRumore(Signal segnaleDaInput){
-
-        Noise[] generati= generaNoise(segnaleDaInput);
-        double[]energia = new double[generati.length];
-        for(int i=0; i<generati.length; i++) {
-            energia[i] = calcoloEnergiaRumore(generati[i]);
-        }
-        return energia;
-    }*/
-
 //CAlcolo dell'energia di un segnale
     //Optimized
     public double calcoloEnergiaSegnale(Signal segnaleDaInput){
@@ -103,6 +92,8 @@ public class Detector {
         }catch (Exception e){
             System.out.println(e.toString());
         }
+
+        System.out.println(result);
         return result;
     }
 
@@ -138,20 +129,6 @@ public class Detector {
         return result;
     }
 }
-
-/* RIVEDERE QUESTO CODICE!!!!!!!!!!!!!!
-            dovrebbe essere il confronto tra la soglia e il vettore di energie di rumore calcolato prima
-
-    public int detectionFreeSpace(double[]energia, int pfa, List<Signal> segnali) throws Exception {
-        double soglia = calculateSoglia(energia,pfa);
-        double[] energy = vettoreEnergiaH1(segnali);
-        int count=0;
-        for (int i=0; i==energy.length; i++){
-            if (energy[i]>soglia)
-                count++;
-        }
-        return count;
-    }*/
 
 
 

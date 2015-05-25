@@ -6,8 +6,6 @@ import signalpocessing.model.Noise;
 import signalpocessing.model.Signal;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,29 +80,16 @@ public class FileBuffer {
     public static void main (String[] args) {
         long timeStart = System.currentTimeMillis();
         List<?> lista;
-        lista = readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_2");
+        lista = readComplexFromPath("/Users/Andrea/Downloads/Sequenze_SDR_2015/Sequenza_3");
         System.out.println(lista.size());
         List<Complex> temp = (List<Complex>) lista.get(2);
         Signal s = new Signal(temp);
         System.out.println(s.size());
         Detector detector = new Detector();
         double[] energyVector = detector.getEnergyVector(s);
-//        System.out.println("Vettore di energia");
-//        for (double d : energyVector){
-//            System.out.println(d);
-//        }
-
         Noise n = new Noise(detector.calcolaSNR(s),s.size());
-       /* System.out.println(detector.calcoloEnergiaSegnale(s));
-        System.out.println(detector.calcoloPotenzaRumore(s));
         System.out.println(detector.calcolaSNR(s));
-*///       Noise[] prova = detector.generaNoise(s);
-    //    for (int i = 0; i < 100; i++) {
-    //        System.out.println(prova[i].toString());
-    //    }*//*
-
-        System.out.println(detector.calcolaSNR(s));
-        System.out.println(detector.calculateSoglia(s));
+        //System.out.println(detector.calculateSoglia(s));
         System.out.println(detector.detectionPercentage(s));
         long timerEnd = System.currentTimeMillis();
         System.out.println("Executed in: "+ ((timerEnd-timeStart)/1000)+ " secondi");
